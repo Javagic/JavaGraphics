@@ -5,5 +5,5 @@ import java.awt.image.BufferedImage;
  */
 public class ImageUtils {
     BufferedImage image = new BufferedImage(100, 50, BufferedImage.TYPE_INT_ARGB);
-    
+
 }
