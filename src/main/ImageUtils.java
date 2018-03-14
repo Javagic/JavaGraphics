@@ -12,7 +12,7 @@ public class ImageUtils {
     static void saveImage(BufferedImage image){
         try {
             // retrieve image
-            File outputfile = new File("saved.png");
+            File outputfile = new File("res/saved.png");
             ImageIO.write(image, "png", outputfile);
         } catch (IOException e) {
             e.printStackTrace();

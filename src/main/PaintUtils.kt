@@ -42,20 +42,18 @@ class LineVU(val image: BufferedImage, val color: Color) : LineDrawer(image, col
             val red = ((1 - error) * color.red).toInt()
             val green = ((1 - error) * color.green).toInt()
             val blue = ((1 - error) * color.blue).toInt()
+            try {
 
             if (steep) {
-                try {
                     image.setRGB(x, y, Color(red, green, blue).rgb)
                     image.setRGB(x, y + sy, Color(color.red - red, color.green - green, color.blue - blue).rgb)
-                } catch (e: IllegalArgumentException) {
-                    println(green)
-                }
+
             } else {
                 image.setRGB(y, x, Color(red, green, blue).rgb)
                 image.setRGB(y + sy, x, Color(color.red - red, color.green - green, color.blue - blue).rgb)
 
             }
-
+            } catch (e: ArrayIndexOutOfBoundsException){}
             error += derror
             if (error > 1.0) {
                 y += sy
