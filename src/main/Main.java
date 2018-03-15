@@ -7,6 +7,7 @@ import main.shape.Triangle;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Random;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -18,6 +19,13 @@ public class Main {
     static int width = 1000;
     static int height = 1000;
     static BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+    static Color[] colors = { new Color(40, 40, 40),
+            new Color(80, 80, 80),
+            new Color(120, 120, 120),
+            new Color(160, 160, 160),
+            new Color(200, 200, 200),
+            new Color(240, 240, 240)};
 
     public static void main(String[] args) {
         Parser.readFile("res/african_head.obj", height);
@@ -33,13 +41,16 @@ public class Main {
             }
         }
 //        plotTriangle();
+        Random random = new Random();
         for (Triangle<Point3D> triangle : mList) {
 
             Point p1 = new Point(triangle.getA().getX(), triangle.getA().getY());
             Point p2 = new Point(triangle.getB().getX(), triangle.getB().getY());
             Point p3 = new Point(triangle.getC().getX(), triangle.getC().getY());
 
-            plotTriangle(p1, p2, p3);
+            int pos = random.nextInt(colors.length);
+            //plotTriangle(p1, p2, p3);
+            BackFaceCulling.backFaceCulling(triangle, image, colors[pos]);
         }
         //drawTriangle();
         ImageUtils.saveImage(image);

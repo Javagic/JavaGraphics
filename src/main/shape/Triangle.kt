@@ -23,4 +23,10 @@ class Triangle<T : Point>(var a: T, var b: T, var c: T) {
                     image.setRGB(x, y, color.rgb)
 
     }
+
+    fun normal(A0: Point3D, A1: Point3D, A2: Point3D) : Point3D {
+        return Point3D(1 * ((A2.y - A0.y) * (A1.z - A0.z)) - (A2.z - A0.z) * (A1.y - A0.y),
+                1 * ((A2.x - A0.x) * (A1.z - A0.z)) - (A2.z - A0.z) * (A1.x - A0.x),
+                1 * ((A2.x - A0.x) * (A1.y - A0.y)) - (A2.y - A0.y) * (A1.x - A0.x))
+    }
 }
