@@ -40,19 +40,7 @@ public class Main {
                 image.setRGB(j, i, Color.BLACK.getRGB());
             }
         }
-//        plotTriangle();
-        Random random = new Random();
-        for (Triangle<Point3D> triangle : mList) {
-
-            Point p1 = new Point(triangle.getA().getX(), triangle.getA().getY());
-            Point p2 = new Point(triangle.getB().getX(), triangle.getB().getY());
-            Point p3 = new Point(triangle.getC().getX(), triangle.getC().getY());
-
-            int pos = random.nextInt(colors.length);
-            //plotTriangle(p1, p2, p3);
-            BackFaceCulling.backFaceCulling(triangle, image, colors[pos]);
-        }
-        //drawTriangle();
+        Luminosity.process(image,mList);
         ImageUtils.saveImage(image);
     }
 
