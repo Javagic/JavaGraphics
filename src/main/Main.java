@@ -42,11 +42,11 @@ public class Main {
                 image.setRGB(j, i, Color.BLACK.getRGB());
             }
         }
-        Luminosity.process(image,mList);
+//        Luminosity.process(image,mList);
         ImageUtils.saveImage(image);
     }
 
-    private static void plotTriangle() {
+/*    private static void plotTriangle() {
         new Triangle(new Point(100, 1,0), new Point(100, 200,0), new Point(200, 100,0))
                 .plot(new LineVU(image, Color.RED));
     }
@@ -68,6 +68,6 @@ public class Main {
     private static void drawTriangle(Point p1, Point p2, Point p3) {
         new Triangle(p1, p2, p3)
                 .draw(image, Color.RED);
-    }
+    }*/
 
 }

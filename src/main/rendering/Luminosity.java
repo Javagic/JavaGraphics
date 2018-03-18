@@ -6,10 +6,10 @@ import main.shape.Triangle;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import static main.utils.VectorUtils.multiple;
+//import static main.utils.VectorUtils.multiple;
 
 public class Luminosity {
-    public static void process(BufferedImage image, List<Triangle> triangles) {
+/*    public static void process(BufferedImage image, List<Triangle> triangles) {
         for (Triangle triangle : triangles) {
             Point n = triangle.normal();
             Point light = new Point(0, 0, -1);
@@ -18,5 +18,5 @@ public class Luminosity {
             if (intensity > 0)
                 BackFaceCulling.backFaceCulling(triangle, image, new Color((int) (intensity * 255), (int) (intensity * 255), (int) (intensity * 255)));
         }
-    }
+    }*/
 }

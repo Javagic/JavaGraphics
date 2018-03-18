@@ -6,9 +6,10 @@ import main.shape.Triangle;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static main.utils.VectorUtils.multiple;
+//import static main.utils.VectorUtils.multiple;
 
 public class BackFaceCulling {
+/*
 
     public static void backFaceCulling(Triangle triangle, BufferedImage image, Color color) {
         Point n = triangle.normal();
@@ -17,6 +18,7 @@ public class BackFaceCulling {
             triangle.draw(image, color);
         }
     }
+*/
 
 
 }

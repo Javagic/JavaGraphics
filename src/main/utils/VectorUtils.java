@@ -47,7 +47,7 @@ public class VectorUtils {
         return c;
     }
 
-   public  static float multiple(Point A, Point B) {
+/*   public  static float multiple(Point A, Point B) {
         return (A.getX() * B.getX()) + (A.getY() * B.getY()) + (A.getZ() * B.getZ());
-    }
+    }*/
 }

@@ -1,6 +1,6 @@
 package main.shape
 
-class Point(val x: Int, val y: Int, val z: Int = 0) {
+class Point(val x: Double, val y: Double, val z: Double = 0.0) {
     fun length(): Float {
         return Math.sqrt((this.x * this.x + this.y * this.y + this.z * this.z).toDouble()).toFloat()
     }
@@ -17,4 +17,8 @@ class Point(val x: Int, val y: Int, val z: Int = 0) {
         if (nominator1 / denominator < 0 || nominator2 / denominator < 0) return false
         return 1f - nominator1 / denominator - nominator2 / denominator >= 0
     }
+
+  /*  infix fun inside(sphere: Sphere): Boolean {
+        return ((sphere.point.x - x)*(sphere.point.x - x) + (sphere.point.y - y)*(sphere.point.y - y)== sphere.R)
+    }*/
 }
