@@ -1,13 +1,15 @@
 package main;
 
+import main.rendering.Luminosity;
 import main.shape.Point;
-import main.shape.Point3D;
 import main.shape.Triangle;
+import main.utils.ImageUtils;
+import main.utils.LineVU;
+import main.utils.Parser;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.Random;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -31,7 +33,7 @@ public class Main {
         Parser.readFile("res/african_head.obj", height);
 
 
-        List<Triangle<Point3D>> mList = Parser.getTriangle();
+        List<Triangle> mList = Parser.getTriangle();
         System.out.println(mList.size());
 
 
@@ -45,7 +47,7 @@ public class Main {
     }
 
     private static void plotTriangle() {
-        new Triangle<Point>(new Point(100, 1), new Point(100, 200), new Point(200, 100))
+        new Triangle(new Point(100, 1,0), new Point(100, 200,0), new Point(200, 100,0))
                 .plot(new LineVU(image, Color.RED));
     }
 
@@ -58,13 +60,13 @@ public class Main {
     }
 
     private static void plotTriangle(Point p1, Point p2, Point p3) {
-        new Triangle<Point>(p1, p2, p3)
+        new Triangle(p1, p2, p3)
                 .plot(new LineVU(image, Color.RED));
     }
 
 
     private static void drawTriangle(Point p1, Point p2, Point p3) {
-        new Triangle<Point>(p1, p2, p3)
+        new Triangle(p1, p2, p3)
                 .draw(image, Color.RED);
     }
 
