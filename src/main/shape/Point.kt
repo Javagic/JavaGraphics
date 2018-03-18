@@ -1,10 +1,14 @@
 package main.shape
 
-open class Point(val x: Int, val y: Int) {
+class Point(val x: Int, val y: Int, val z: Int = 0) {
+    fun length(): Float {
+        return Math.sqrt((this.x * this.x + this.y * this.y + this.z * this.z).toDouble()).toFloat()
+    }
+
     /**
      * Проверка принадлежности точки заданому треугольнику с помощью барицентрических координат
      */
-    infix fun <T : Point> inside(triangle: Triangle<T>): Boolean {
+    infix fun inside(triangle: Triangle): Boolean {
         val x = listOf(triangle.a.x, triangle.b.x, triangle.c.x)
         val y = listOf(triangle.a.y, triangle.b.y, triangle.c.y)
         val nominator1: Float = ((y[1] - y[2]) * (this.x - x[2]) + (x[2] - x[1]) * (this.y - y[2])).toFloat()

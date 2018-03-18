@@ -1,10 +1,9 @@
-package main
+package main.utils
 
 import java.awt.*
 import java.awt.image.BufferedImage
 
 import java.lang.Math.abs
-import java.lang.Math.max
 
 /**
  * a0 = x1
@@ -44,16 +43,17 @@ class LineVU(val image: BufferedImage, val color: Color) : LineDrawer(image, col
             val blue = ((1 - error) * color.blue).toInt()
             try {
 
-            if (steep) {
+                if (steep) {
                     image.setRGB(x, y, Color(red, green, blue).rgb)
                     image.setRGB(x, y + sy, Color(color.red - red, color.green - green, color.blue - blue).rgb)
 
-            } else {
-                image.setRGB(y, x, Color(red, green, blue).rgb)
-                image.setRGB(y + sy, x, Color(color.red - red, color.green - green, color.blue - blue).rgb)
+                } else {
+                    image.setRGB(y, x, Color(red, green, blue).rgb)
+                    image.setRGB(y + sy, x, Color(color.red - red, color.green - green, color.blue - blue).rgb)
 
+                }
+            } catch (e: ArrayIndexOutOfBoundsException) {
             }
-            } catch (e: ArrayIndexOutOfBoundsException){}
             error += derror
             if (error > 1.0) {
                 y += sy
