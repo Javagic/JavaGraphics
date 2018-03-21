@@ -1,6 +1,8 @@
 package main.shape
 
-class Point(val x: Double, val y: Double, val z: Double = 0.0) {
+import main.utils.vectors.Arr
+
+class Point( x: Double,  y: Double,  z: Double = 0.0) : Arr(x,y,z) {
     fun length(): Float {
         return Math.sqrt((this.x * this.x + this.y * this.y + this.z * this.z).toDouble()).toFloat()
     }

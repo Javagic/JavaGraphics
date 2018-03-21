@@ -1,9 +1,10 @@
 package main.shape
 
+import main.utils.vectors.RP0
 import java.awt.Color
 import java.awt.image.BufferedImage
 
-class Sphere(val point: Point, val R: Double) {
+class Sphere(val point: RP0, val R: Double) {
    /* fun draw(image: BufferedImage, color: Color) {
         val minX = maxOf(0.0, point.x - R)
         val minY = maxOf(0.0, point.y - R)

@@ -1,4 +1,5 @@
 package main
+
 import main.shape.Point
 import main.shape.Sphere
 import main.shape.Triangle
@@ -15,7 +16,7 @@ import java.awt.image.BufferedImage
 import java.util.*
 import kotlin.math.sqrt
 
-object SphereMain {
+object HyperboloidMain {
     internal var x0: Double = 0.toDouble()
     internal var y0: Double = 0.toDouble()
     internal var z0: Double = 0.toDouble()
@@ -25,6 +26,9 @@ object SphereMain {
     internal var rpx0: Double = 0.toDouble()
     internal var rpy0: Double = 0.toDouble()
     internal var rpz0: Double = 0.toDouble()
+    internal var nx: Double = 0.toDouble()
+    internal var ny: Double = 0.toDouble()
+    internal var nz: Double = 0.toDouble()
     internal var width = 1000
     internal var height = 1000
     internal var image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
@@ -40,11 +44,11 @@ object SphereMain {
         val plotter = Plotter(ortoManager, image)
         plotter.apply {
             printCoords()
-            plotRayXSphereRefraction(Sphere(RP0(2.0,2.0,0.0),2.0),Color.WHITE,R0(0.0,0.0,0.0), E(1.5,10.0,0.0),Color.RED)
+            plotRay(R0(0.0,0.0,0.0), E(3.0,1.0,0.0),Color.RED)
+            plotSphere(Sphere(RP0(3.0,3.5,0.0),4.5), Color.WHITE)
         }
         ImageUtils.saveImage(image)
     }
-
 
 
     private fun initFromInput() {
@@ -69,9 +73,17 @@ object SphereMain {
         rpy0 = scanner.nextDouble()
         println("Координата точки плоскости по z:")
         rpz0 = scanner.nextDouble()
+        println("Координата нормали по x:")
+        nx = scanner.nextDouble()
+        println("Координата нормали по y:")
+        ny = scanner.nextDouble()
+        println("Координата нормали по z:")
+        nz = scanner.nextDouble()
+//        val absN = sqrt(nx * nx + ny * ny + nz * nz)
 //        val absE = sqrt(ex * ex + ey * ey + ez * ez)
 //        R0 = doubleArrayOf(x0, y0, z0)
 //        E = doubleArrayOf(ex / absE, ey / absE, ez / absE)
 //        RP0 = doubleArrayOf(rpx0, rpy0, rpz0)
+//        N = doubleArrayOf(nx / absN, ny / absN, nz / absN)
     }
 }

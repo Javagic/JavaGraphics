@@ -1,6 +1,5 @@
 package main
 
-import main.rendering.Luminosity
 import main.shape.Point
 import main.shape.Sphere
 import main.shape.Triangle
@@ -8,6 +7,9 @@ import main.utils.ImageUtils
 import main.utils.OrtoManager
 import main.utils.Parser
 import main.utils.Plotter
+import main.utils.vectors.E
+import main.utils.vectors.R0
+import main.utils.vectors.RP0
 import java.awt.Color
 
 import java.awt.image.BufferedImage
@@ -27,10 +29,6 @@ object PlaneMain {
     internal var nx: Double = 0.toDouble()
     internal var ny: Double = 0.toDouble()
     internal var nz: Double = 0.toDouble()
-    internal lateinit var R0: DoubleArray//ray
-    internal lateinit var E: DoubleArray//rayDirection
-    internal lateinit var RP0: DoubleArray//plane
-    internal lateinit var N: DoubleArray//normal
     internal var width = 1000
     internal var height = 1000
     internal var image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
@@ -46,8 +44,8 @@ object PlaneMain {
         val plotter = Plotter(ortoManager, image)
         plotter.apply {
             printCoords()
-            plotRay(Point(0.0,0.0,0.0), Point(3.0,1.0,0.0),Color.RED)
-            plotSphere(Sphere(Point(3.0,3.5,0.0),4.5), Color.WHITE)
+            plotRay(R0(0.0,0.0,0.0), E(3.0,1.0,0.0),Color.RED)
+            plotSphere(Sphere(RP0(3.0,3.5,0.0),4.5), Color.WHITE)
         }
         ImageUtils.saveImage(image)
     }
@@ -81,11 +79,11 @@ object PlaneMain {
         ny = scanner.nextDouble()
         println("Координата нормали по z:")
         nz = scanner.nextDouble()
-        val absN = sqrt(nx * nx + ny * ny + nz * nz)
-        val absE = sqrt(ex * ex + ey * ey + ez * ez)
-        R0 = doubleArrayOf(x0, y0, z0)
-        E = doubleArrayOf(ex / absE, ey / absE, ez / absE)
-        RP0 = doubleArrayOf(rpx0, rpy0, rpz0)
-        N = doubleArrayOf(nx / absN, ny / absN, nz / absN)
+//        val absN = sqrt(nx * nx + ny * ny + nz * nz)
+//        val absE = sqrt(ex * ex + ey * ey + ez * ez)
+//        R0 = doubleArrayOf(x0, y0, z0)
+//        E = doubleArrayOf(ex / absE, ey / absE, ez / absE)
+//        RP0 = doubleArrayOf(rpx0, rpy0, rpz0)
+//        N = doubleArrayOf(nx / absN, ny / absN, nz / absN)
     }
 }

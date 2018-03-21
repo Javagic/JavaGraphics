@@ -1,6 +1,7 @@
 package main.utils
 
 import main.shape.Point
+import main.utils.vectors.Arr
 import java.awt.image.BufferedImage
 
 class OrtoManager(val startX: Double,
@@ -15,6 +16,8 @@ class OrtoManager(val startX: Double,
         val y = ((endY - point.y) * image.height / (endY - startY)).toInt()
         return Pixel(x, y)
     }
+
+    fun pixel(arr: Arr) = pixel(Point(arr.x, arr.y, arr.z))
 
     fun distance(double: Double) = (double * image.height / (endY - startY)).toInt()
 }
