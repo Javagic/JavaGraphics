@@ -1,5 +1,6 @@
 package main
 
+import main.shape.Hyperboloid
 import main.shape.Point
 import main.shape.Sphere
 import main.shape.Triangle
@@ -17,18 +18,18 @@ import java.util.*
 import kotlin.math.sqrt
 
 object HyperboloidMain {
-    internal var x0: Double = 0.toDouble()
-    internal var y0: Double = 0.toDouble()
-    internal var z0: Double = 0.toDouble()
-    internal var ex: Double = 0.toDouble()
-    internal var ey: Double = 0.toDouble()
-    internal var ez: Double = 0.toDouble()
-    internal var rpx0: Double = 0.toDouble()
-    internal var rpy0: Double = 0.toDouble()
-    internal var rpz0: Double = 0.toDouble()
-    internal var nx: Double = 0.toDouble()
-    internal var ny: Double = 0.toDouble()
-    internal var nz: Double = 0.toDouble()
+    internal var x0: Double = 0.0
+    internal var y0: Double = 0.0
+    internal var z0: Double = 0.0
+    internal var ex: Double = 1.0
+    internal var ey: Double = 1.0
+    internal var ez: Double = 0.0
+    internal var rpx0: Double = 3.0
+    internal var rpy0: Double = 4.0
+    internal var rpz0: Double = .0
+    internal var a: Double = 4.0
+    internal var b: Double = 2.0
+    internal var c: Double = 1.0
     internal var width = 1000
     internal var height = 1000
     internal var image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
@@ -43,9 +44,11 @@ object HyperboloidMain {
         val ortoManager = OrtoManager(-10.0, 10.0, -10.0, 10.0, image)
         val plotter = Plotter(ortoManager, image)
         plotter.apply {
-            printCoords()
-            plotRay(R0(0.0,0.0,0.0), E(3.0,1.0,0.0),Color.RED)
-            plotSphere(Sphere(RP0(3.0,3.5,0.0),4.5), Color.WHITE)
+            val hype = Hyperboloid(RP0(rpx0,rpy0,rpz0),a,b,c)
+            val ray = R0(x0,y0,z0)
+            val e = E(ex,ey,ez)
+            printCoords(true)
+            plotRayXHyperboloidReflection(hype, Color.WHITE,ray, e, Color.RED)
         }
         ImageUtils.saveImage(image)
     }
@@ -74,11 +77,6 @@ object HyperboloidMain {
         println("Координата точки плоскости по z:")
         rpz0 = scanner.nextDouble()
         println("Координата нормали по x:")
-        nx = scanner.nextDouble()
-        println("Координата нормали по y:")
-        ny = scanner.nextDouble()
-        println("Координата нормали по z:")
-        nz = scanner.nextDouble()
 //        val absN = sqrt(nx * nx + ny * ny + nz * nz)
 //        val absE = sqrt(ex * ex + ey * ey + ez * ez)
 //        R0 = doubleArrayOf(x0, y0, z0)

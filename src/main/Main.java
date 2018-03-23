@@ -1,6 +1,5 @@
 package main;
 
-import main.rendering.Luminosity;
 import main.shape.Point;
 import main.shape.Triangle;
 import main.utils.ImageUtils;

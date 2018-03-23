@@ -19,5 +19,10 @@ class OrtoManager(val startX: Double,
 
     fun pixel(arr: Arr) = pixel(Point(arr.x, arr.y, arr.z))
 
+    fun point(x:Double,y:Double) :Point{
+        val x1 = (endX - startX)/((x - startX) * image.width)
+        val y1 = (endY - startY) /((endY - y) * image.height)
+        return Point(x1,y1,0.0)
+    }
     fun distance(double: Double) = (double * image.height / (endY - startY)).toInt()
 }

@@ -16,15 +16,16 @@ import java.util.*
 import kotlin.math.sqrt
 
 object SphereMain {
-    internal var x0: Double = 0.toDouble()
-    internal var y0: Double = 0.toDouble()
-    internal var z0: Double = 0.toDouble()
-    internal var ex: Double = 0.toDouble()
-    internal var ey: Double = 0.toDouble()
-    internal var ez: Double = 0.toDouble()
-    internal var rpx0: Double = 0.toDouble()
-    internal var rpy0: Double = 0.toDouble()
-    internal var rpz0: Double = 0.toDouble()
+    internal var x0: Double = 0.0
+    internal var y0: Double = 0.0
+    internal var z0: Double = 0.0
+    internal var ex: Double = 1.0
+    internal var ey: Double = 1.0
+    internal var ez: Double = 0.0
+    internal var rpx0: Double = 3.0
+    internal var rpy0: Double = 4.0
+    internal var rpz0: Double = .0
+    internal var R: Double = 4.0
     internal var width = 1000
     internal var height = 1000
     internal var image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
@@ -36,11 +37,14 @@ object SphereMain {
                 image.setRGB(j, i, Color.BLACK.rgb)
             }
         }
+        val sphere = Sphere(RP0(rpx0,rpy0,rpz0),R)
+        val ray = R0(x0,y0,z0)
+        val e = E(ex,ey,ez)
         val ortoManager = OrtoManager(-10.0, 10.0, -10.0, 10.0, image)
         val plotter = Plotter(ortoManager, image)
         plotter.apply {
-            printCoords()
-            plotRayXSphereRefraction(Sphere(RP0(2.0,2.0,0.0),2.0),Color.WHITE,R0(0.0,0.0,0.0), E(1.5,10.0,0.0),Color.RED)
+            printCoords(false)
+            plotRayXSphereRefraction(sphere,Color.WHITE,ray, e,Color.RED)
         }
         ImageUtils.saveImage(image)
     }
