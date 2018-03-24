@@ -12,6 +12,8 @@
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
     <bytecodeTargetLevel>
+      <module name="IdeaProjects-JavaGraphics_main" target="1.8" />
+      <module name="IdeaProjects-JavaGraphics_test" target="1.8" />
       <module name="JavaGraphics_main" target="1.8" />
       <module name="JavaGraphics_test" target="1.8" />
     </bytecodeTargetLevel>
