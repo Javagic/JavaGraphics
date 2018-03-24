@@ -30,7 +30,7 @@ public class Main {
             new Color(240, 240, 240)};
 
     public static void main(String[] args) {
-        Parser.readFile("res/african_head.obj", height);
+        Parser.readFile("src/main/resources/african_head.obj", height);
 
 
         List<Triangle> mList = Parser.getTriangle();

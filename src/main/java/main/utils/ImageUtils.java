@@ -11,8 +11,7 @@ import java.io.IOException;
 public class ImageUtils {
     public static void saveImage(BufferedImage image) {
         try {
-            // retrieve image
-            File outputfile = new File("res/saved.png");
+            File outputfile = new File("src/main/resources/saved.png");
             ImageIO.write(image, "png", outputfile);
         } catch (IOException e) {
             e.printStackTrace();
