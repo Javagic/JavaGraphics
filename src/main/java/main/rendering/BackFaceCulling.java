@@ -2,21 +2,26 @@ package main.rendering;
 
 import main.shape.Point;
 import main.shape.Triangle;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static main.utils.VectorUtils.multiple;
+import static main.utils.VectorUtils.scalar;
 
-public class BackFaceCulling {
+public class BackFaceCulling implements Render {
+    private BufferedImage image;
 
-    public static void backFaceCulling(Triangle triangle, BufferedImage image, Color color) {
+    public BackFaceCulling(BufferedImage image){
+        this.image = image;
+    }
+
+    @Override
+    public void process(@NotNull Triangle triangle, @NotNull Color color) {
         Point n = triangle.normal();
         Point v = new Point(0, 0, 1);
-        if (multiple(n, v) / (n.length() * v.length()) < 0) {
+        if (scalar(n, v) / (n.length() * v.length()) < 0) {
             triangle.draw(image, color);
         }
     }
-
-
 }
