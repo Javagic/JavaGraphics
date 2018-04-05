@@ -1,25 +1,35 @@
 package main.shape
 
 import main.utils.LineDrawer
+import main.utils.OrtoManager
+import main.utils.Pixel
 import java.awt.Color
 import java.awt.image.BufferedImage
 
 
-class Triangle( a: Point,  b: Point,  c: Point) : Plane(a,b,c) {
+class Triangle(a: Point, b: Point, c: Point) : Plane(a,b,c) {
     /**Метод отрисовки трех линий, соединяющих точки треугольника*/
-    fun plot(drawer: LineDrawer) = drawer.plotLine(a.x, a.y, b.x, b.y)
-            .also { drawer.plotLine(a.x, a.y, c.x, c.y) }
-            .also { drawer.plotLine(c.x, c.y, b.x, b.y) }
+    fun plot(drawer: LineDrawer) {
+        val pa = OrtoManager.pixel(a)
+        val pb = OrtoManager.pixel(b)
+        val pc = OrtoManager.pixel(c)
+        drawer.plotLine(pa.x, pa.y, pb.x, pb.y)
+        .also { drawer.plotLine(pa.x, pa.y, pc.x, pc.y) }
+                .also { drawer.plotLine(pc.x, pc.y, pb.x, pb.y) }
+    }
 
     /**Метод закрашивания треугольника с учетом границ изображения*/
     fun draw(image: BufferedImage, color: Color) {
-        val minX = maxOf(0, minOf(a.x, b.x, c.x))
-        val minY = maxOf(0, minOf(a.y, b.y, c.y))
-        val maxX = minOf(image.height - 1, maxOf(a.x, b.x, c.x))
-        val maxY = minOf(image.height - 1, maxOf(a.y, b.y, c.y))
+        val pa = OrtoManager.pixel(a)
+        val pb = OrtoManager.pixel(b)
+        val pc = OrtoManager.pixel(c)
+        val minX = maxOf(1, minOf(pa.x, pb.x, pc.x))
+        val minY = maxOf(1, minOf(pa.y, pb.y, pc.y))
+        val maxX = minOf(image.height - 1, maxOf(pa.x, pb.x, pc.x))
+        val maxY = minOf(image.height - 1, maxOf(pa.y, pb.y, pc.y))
         for (x in minX..maxX)
             for (y in minY..maxY)
-                if (Point(x, y) inside this)
+                if (Pixel(x, y) inside this)
                     image.setRGB(x, y, color.rgb)
     }
 

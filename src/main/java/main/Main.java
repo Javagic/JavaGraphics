@@ -1,19 +1,23 @@
 package main;
 
+import main.rendering.BackFaceCulling;
 import main.rendering.Luminosity;
 import main.rendering.ZBuffer;
 import main.shape.Point;
 import main.shape.Triangle;
 import main.utils.ImageUtils;
 import main.utils.LineVU;
+import main.utils.OrtoManager;
 import main.utils.Parser;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+
 /**
  * Created by Ilya on 3/2/2018.
  */
@@ -23,7 +27,8 @@ public class Main {
     static BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
     public static void main(String[] args) {
-        Parser.readFile("src/main/resources/african_head.obj", height);
+        OrtoManager ortoManager = new OrtoManager(image, 1);
+        Parser.readFile("src/main/resources/african_head.obj");
 
         List<Triangle> triangles = Parser.getTriangle();
         for (int i = 0; i < image.getHeight() - 1; i++) {
@@ -36,7 +41,7 @@ public class Main {
     }
 
     private static void plotTriangle() {
-        new Triangle(new Point(100, 1,0), new Point(100, 200,0), new Point(200, 100,0))
+        new Triangle(new Point(0.7, 0.3,0), new Point(0.3, 0.5,0), new Point(0.1, 0.5,0))
                 .plot(new LineVU(image, Color.RED));
     }
 

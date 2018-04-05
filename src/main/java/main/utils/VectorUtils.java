@@ -1,6 +1,5 @@
 package main.utils;
 
-import main.shape.DoublePoint;
 import main.shape.Point;
 
 public class VectorUtils {
@@ -48,20 +47,44 @@ public class VectorUtils {
         return c;
     }
 
+
     public static float scalar(Point A, Point B) {
-        return (A.getX() * B.getX()) + (A.getY() * B.getY()) + (A.getZ() * B.getZ());
+        return (float)((A.getX() * B.getX()) + (A.getY() * B.getY()) + (A.getZ() * B.getZ()));
     }
 
-    public static DoublePoint multiply(DoublePoint A, double b) {
-        return new DoublePoint(A.getX() * b, A.getY() * b, A.getZ() * b);
+    public static Point multiply(Point A, float b) {
+        return new Point(A.getX() * b, A.getY() * b, A.getZ() * b);
+    }
+    public static Point multiply(Point A, double b) {
+        return new Point(A.getX() * b, A.getY() * b, A.getZ() * b);
     }
 
-    public static DoublePoint diff(DoublePoint A, DoublePoint B) {
-        return new DoublePoint(A.getX() - B.getX(), A.getY() - B.getY(), A.getZ() - B.getZ());
+    public static Point diff(Point A, Point B) {
+        return new Point(A.getX() - B.getX(), A.getY() - B.getY(), A.getZ() - B.getZ());
     }
 
-    public static DoublePoint sum(DoublePoint A, DoublePoint B) {
-        return new DoublePoint(A.getX() + B.getX(), A.getY() + B.getY(), A.getZ() + B.getZ());
+    public static Point sum(Point A, Point B) {
+        return new Point(A.getX() + B.getX(), A.getY() + B.getY(), A.getZ() + B.getZ());
+    }
+
+
+
+
+    public static IntPoint multiply(IntPoint A, float b) {
+        return new IntPoint((int)(A.getX() * b), (int)(A.getY() * b), (int)(A.getZ() * b));
+    }
+
+
+    public static IntPoint multiply(IntPoint A, double b) {
+        return new IntPoint((int)(A.getX() * b), (int)(A.getY() * b), (int)(A.getZ() * b));
+    }
+
+    public static IntPoint diff(IntPoint A, IntPoint B) {
+        return new IntPoint(A.getX() - B.getX(), A.getY() - B.getY(), A.getZ() - B.getZ());
+    }
+
+    public static IntPoint sum(IntPoint A, IntPoint B) {
+        return new IntPoint(A.getX() + B.getX(), A.getY() + B.getY(), A.getZ() + B.getZ());
     }
 
 }
