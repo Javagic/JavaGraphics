@@ -5,14 +5,16 @@ import java.awt.image.BufferedImage
 
 /**
  * Класс осуществляющий перевод из координат с плавающей точкой в пиксельное представление
+ * Позволяет избежать переворачиваний текстурных файлов и конечного изображения
  */
-class OrtoManager(image: BufferedImage, absSize: Int) {
-    init {
+class OrtoManager(val image: BufferedImage, val absSize: Int) {
+
+
+    fun init(){
         Companion.width = image.width
         Companion.height = image.height
         Companion.absSize = absSize
     }
-
     /**
      * Передача по модулю [absSize] в зависимости от исчиления координат точек в файле *.obj
      */
@@ -31,6 +33,17 @@ class OrtoManager(image: BufferedImage, absSize: Int) {
             //потому что в BufferedImage 0,0 находится в верхнем левом углу
             val y = ((absSize - point.y) * height / (absSize - (-absSize))).toInt()
             return IntPoint(x, y, z)
+        }
+
+        /**
+         * Поскольку в текстурах координаты от  0 до 1, сделал другой пересчет точек
+         */
+        fun diffusePixel(point: Point): IntPoint {
+            if (point.x !in -absSize..absSize || point.y !in -absSize..absSize) return Pixel.EMPTY
+            val x = ((absSize - point.x) * width).toInt()
+            //потому что в BufferedImage 0,0 находится в верхнем левом углу
+            val y = ((absSize - point.y) * height).toInt()
+            return IntPoint(x, y, 0)
         }
     }
 }

@@ -87,4 +87,21 @@ public class VectorUtils {
         return new IntPoint(A.getX() + B.getX(), A.getY() + B.getY(), A.getZ() + B.getZ());
     }
 
+    public static Pixel multiply(Pixel A, float b) {
+        return new Pixel((int)(A.getX() * b), (int)(A.getY() * b));
+    }
+
+
+    public static Pixel multiply(Pixel A, double b) {
+        return new Pixel((int)(A.getX() * b), (int)(A.getY() * b));
+    }
+
+    public static Pixel diff(Pixel A, Pixel B) {
+        return new Pixel(A.getX() - B.getX(), A.getY() - B.getY());
+    }
+
+    public static Pixel sum(Pixel A, Pixel B) {
+        return new Pixel(A.getX() + B.getX(), A.getY() + B.getY());
+    }
+
 }

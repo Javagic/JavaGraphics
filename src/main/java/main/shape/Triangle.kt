@@ -7,14 +7,14 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 
 
-class Triangle(a: Point, b: Point, c: Point) : Plane(a,b,c) {
+class Triangle(a: Point, b: Point, c: Point) : Plane(a, b, c) {
     /**Метод отрисовки трех линий, соединяющих точки треугольника*/
     fun plot(drawer: LineDrawer) {
         val pa = OrtoManager.pixel(a)
         val pb = OrtoManager.pixel(b)
         val pc = OrtoManager.pixel(c)
         drawer.plotLine(pa.x, pa.y, pb.x, pb.y)
-        .also { drawer.plotLine(pa.x, pa.y, pc.x, pc.y) }
+                .also { drawer.plotLine(pa.x, pa.y, pc.x, pc.y) }
                 .also { drawer.plotLine(pc.x, pc.y, pb.x, pb.y) }
     }
 
@@ -33,5 +33,8 @@ class Triangle(a: Point, b: Point, c: Point) : Plane(a,b,c) {
                     image.setRGB(x, y, color.rgb)
     }
 
+    fun draw(image: BufferedImage, red: Int, green: Int, blue: Int) = draw(image, Color(red, green, blue))
+
+    fun draw(image: BufferedImage, intensity: Double) = draw(image, (255 * intensity).toInt(), (255 * intensity).toInt(), (255 * intensity).toInt())
 
 }

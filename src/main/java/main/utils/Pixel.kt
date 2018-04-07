@@ -1,12 +1,15 @@
 package main.utils
 
+import main.shape.Point
 import main.shape.Triangle
 
 class Pixel(x: Int, y: Int) : IntPoint(x, y, 0) {
 
+    constructor(point: Point) : this(point.x.toInt(),point.y.toInt())
 companion object {
     val EMPTY = Pixel(-1,-1)
 }
+
     /**
      * Проверка принадлежности точки заданому треугольнику с помощью барицентрических координат
      */
@@ -22,4 +25,5 @@ companion object {
         if (nominator1 / denominator < 0 || nominator2 / denominator < 0) return false
         return 1f - nominator1 / denominator - nominator2 / denominator >= 0
     }
+
 }

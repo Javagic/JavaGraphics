@@ -17,6 +17,7 @@ public class Parser {
     private static List<Triangle> sTriangle = new ArrayList<>();
     private static List<Point> textureVertices = new ArrayList<>();
     private static List<Point> normalVertices = new ArrayList<>();
+    private static List<Face> faces = new ArrayList<>();
 
     public static void readFile(String PATH) {
 
@@ -25,10 +26,9 @@ public class Parser {
         else
             sVertices.clear();
         if (sTriangle == null)
-            sTriangle = new ArrayList<Triangle>();
+            sTriangle = new ArrayList<>();
         else
             sTriangle.clear();
-
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(PATH), Charset.forName("UTF-8")));
@@ -36,9 +36,6 @@ public class Parser {
             while ((line = reader.readLine()) != null && !line.equals("")) {
                 String[] array = line.split(" +");
                 switch (array[0]) {
-                    case "f":
-                        readTriangle(array);
-                        break;
                     case "v":
                         readDoublePoint(array, sVertices);
                         break;
@@ -47,6 +44,9 @@ public class Parser {
                         break;
                     case "vn":
                         readDoublePoint(array, normalVertices);
+                        break;
+                    case "f":
+                        readTriangle(array);
                         break;
                 }
             }
@@ -62,20 +62,16 @@ public class Parser {
                 }
             }
         }
+
     }
 
     private static void readDoublePoint(String[] array, List<Point> list) {
         try {
             if (sVertices == null)
                 sVertices = new ArrayList<>();
-//            int s = size / 2;
-//            int x = (int) (Double.parseDouble(array[1]) * s) + s;
-//            int y = (int) (Double.parseDouble(array[2]) * s) + s;
-//            int z = (int) (Double.parseDouble(array[3]) * s) + s;
             double x = Double.parseDouble(array[1]);
             double y = Double.parseDouble(array[2]);
             double z = Double.parseDouble(array[3]);
-            //System.out.println("Точка: x = " + x + ", y = " + y + ", z = " + z);
 
             list.add(new Point(x, y, z));
         } catch (Exception e) {
@@ -89,12 +85,20 @@ public class Parser {
         int v1 = Integer.parseInt(array[1].split("/")[0]);
         int v2 = Integer.parseInt(array[2].split("/")[0]);
         int v3 = Integer.parseInt(array[3].split("/")[0]);
-
+        int vt1 = Integer.parseInt(array[1].split("/")[1]);
+        int vt2 = Integer.parseInt(array[2].split("/")[1]);
+        int vt3 = Integer.parseInt(array[3].split("/")[1]);
+        int vn1 = Integer.parseInt(array[1].split("/")[2]);
+        int vn2 = Integer.parseInt(array[2].split("/")[2]);
+        int vn3 = Integer.parseInt(array[3].split("/")[2]);
         sTriangle.add(new Triangle(sVertices.get(v1 - 1), sVertices.get(v2 - 1), sVertices.get(v3 - 1)));
+        faces.add(new Face(new Vertex(new Point(sVertices.get(v1 - 1)), new Point(textureVertices.get(vt1 - 1)), new Point(normalVertices.get(vn1 - 1))),
+                new Vertex(new Point(sVertices.get(v2 - 1)), new Point(textureVertices.get(vt2 - 1)), new Point(normalVertices.get(vn2 - 1))),
+                new Vertex(new Point(sVertices.get(v3 - 1)), new Point(textureVertices.get(vt3 - 1)), new Point(normalVertices.get(vn3 - 1)))));
     }
 
-    public static List<Triangle> getTriangle() {
-        return sTriangle;
+    public static List<Face> getFaces() {
+        return faces;
     }
 
 }
