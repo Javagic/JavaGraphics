@@ -1,5 +1,6 @@
 package main;
 
+import main.rendering.BackFaceCulling;
 import main.rendering.Luminosity;
 import main.rendering.ZBuffer;
 import main.utils.*;
@@ -19,14 +20,14 @@ public class MainFrame extends JFrame{
     private JMenuItem mExitItem, mOpenFileItem;
     private JMenuBar mMenuBar;
     private JMenu mMenu;
-    private Checkbox mIntensity, mTexture;
+    private Checkbox mIntensity, mTexture, mBackFaceCulling;
     private String PATH_OBJ;
     private JLabel mImageLabel;
     private JPanel mPanel;
     private JButton mStartBtn;
 
-    static int width = 1024;
-    static int height = 1024;
+    static int width = 600;
+    static int height = 600;
     static BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     static BufferedImage diffuseImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
@@ -56,12 +57,14 @@ public class MainFrame extends JFrame{
 
         mPanel.add(mStartBtn);
 
-        mIntensity = new Checkbox("Освященность");
+        mIntensity = new Checkbox("Освещенность");
         mPanel.add(mIntensity);
 
         mTexture = new Checkbox("Текстуры");
         mPanel.add(mTexture);
 
+        mBackFaceCulling = new Checkbox("Отсечение не лицевых граней");
+        mPanel.add(mBackFaceCulling);
 
         mImageLabel = new JLabel();
         mPanel.add(mImageLabel);
@@ -71,35 +74,24 @@ public class MainFrame extends JFrame{
     // Создание верхнего меню
     private void createMenu(){
         mOpenFileItem = new JMenuItem("Open");
-        mOpenFileItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileopen = new JFileChooser();
-                int ret = fileopen.showDialog(null, "Открыть файл");
-                if (ret == JFileChooser.APPROVE_OPTION) {
-                    File file = fileopen.getSelectedFile();
-                    // TODO: 07.04.2018 здесь нужен тест
-                    if(checkPathObj(file.getPath())) {
-                        PATH_OBJ = file.getPath();
-                        mStartBtn.setEnabled(true);
-                        mIntensity.setEnabled(true);
-                        mTexture.setEnabled(true);
-                    } else {
-                        PATH_OBJ = null;
-                        mStartBtn.setEnabled(false);
-                        mIntensity.setEnabled(false);
-                        mTexture.setEnabled(false);
-                    }
+        mOpenFileItem.addActionListener(e -> {
+            JFileChooser fileopen = new JFileChooser();
+            int ret = fileopen.showDialog(null, "Открыть файл");
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                File file = fileopen.getSelectedFile();
+                // TODO: 07.04.2018 здесь нужен тест
+                if(checkPathObj(file.getPath())) {
+                    PATH_OBJ = file.getPath();
+                    addStartListener(mIntensity);
+                    addStartListener(mTexture);
+                    addStartListener(mBackFaceCulling);
+                } else {
+                    PATH_OBJ = null;
                 }
             }
         });
         mExitItem = new JMenuItem("Exit");
-        mExitItem.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        mExitItem.addActionListener(e -> System.exit(0));
 
         mMenu = new JMenu("File");
         mMenu.add(mOpenFileItem);
@@ -146,16 +138,32 @@ public class MainFrame extends JFrame{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Luminosity.Companion.render(faces, new ZBuffer(image, diffuseImage));
+        diffuseImage = resize(diffuseImage,width,height);
+        if(mBackFaceCulling.getState()){
+            Luminosity.Companion.render(faces, new BackFaceCulling(image), mIntensity.getState());
+        }
+        else{
+            Luminosity.Companion.render(faces, new ZBuffer(image, diffuseImage,mTexture.getState()), mIntensity.getState());
+        }
 
         showResultImage(image);
-        endProcessing();
         ImageUtils.saveImage(image);
-
     }
-    private void endProcessing(){
-        mIntensity.setEnabled(false);
-        mTexture.setEnabled(false);
-        mStartBtn.setEnabled(false);
+
+    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
+    }
+
+    private void addStartListener(Checkbox cb){
+        cb.addItemListener(e->{
+            start();
+        });
     }
 }

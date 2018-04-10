@@ -9,7 +9,7 @@ import main.utils.VectorUtils.*
 import java.awt.Color
 import java.awt.image.BufferedImage
 
-class ZBuffer(var image: BufferedImage, var diffuseImage: BufferedImage) :Render {
+class ZBuffer(var image: BufferedImage, var diffuseImage: BufferedImage, var allowTextures: Boolean) : Render {
 
 
     private val zBuffer by lazy { DoubleArray(image.width * image.height, { Double.NEGATIVE_INFINITY }) }
@@ -62,9 +62,9 @@ class ZBuffer(var image: BufferedImage, var diffuseImage: BufferedImage) :Render
                     zBuffer[idx] = P.z.toDouble()
                     val col = diffuseImage.getRGB(uvP.x, uvP.y)
 
-                    val red = ((col shr 16) and 0xff) * intensity
-                    val green = ((col shr 8) and 0xff) * intensity
-                    val blue = ((col) and 0xff) * intensity
+                    val red = (if (allowTextures) ((col shr 16) and 0xff) else 255) * intensity
+                    val green = (if (allowTextures) ((col shr 8) and 0xff) else 255) * intensity
+                    val blue = (if (allowTextures) ((col) and 0xff) else 255) * intensity
 
 
                     image.setRGB(P.x, P.y, Color(red.toInt(), green.toInt(), blue.toInt()).rgb)
