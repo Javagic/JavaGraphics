@@ -10,14 +10,21 @@ import java.io.IOException;
 
 public class TGAReader
 {
-    public static Image getImage(String fileName) throws IOException
+    public static Image getImage(String fileName)
     {
-        File f = new File(fileName);
-        byte[] buf = new byte[(int)f.length()];
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-        bis.read(buf);
-        bis.close();
-        return decode(buf);
+        try {
+            File f = new File(fileName);
+            byte[] buf = new byte[(int) f.length()];
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
+            bis.read(buf);
+            bis.close();
+            return decode(buf);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
     }
 
     private static int offset;

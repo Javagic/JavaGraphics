@@ -52,7 +52,7 @@ public class Parser {
             }
             //System.out.println(sVertices.size());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } finally {
             if (reader != null) {
                 try {
@@ -75,7 +75,10 @@ public class Parser {
 
             list.add(new Point(x, y, z));
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            double x = Double.parseDouble(array[1]);
+            double y = Double.parseDouble(array[2]);
+            list.add(new Point(x, y, 0));
         }
     }
 
@@ -91,10 +94,16 @@ public class Parser {
         int vn1 = Integer.parseInt(array[1].split("/")[2]);
         int vn2 = Integer.parseInt(array[2].split("/")[2]);
         int vn3 = Integer.parseInt(array[3].split("/")[2]);
-        sTriangle.add(new Triangle(sVertices.get(v1 - 1), sVertices.get(v2 - 1), sVertices.get(v3 - 1)));
-        faces.add(new Face(new Vertex(new Point(sVertices.get(v1 - 1)), new Point(textureVertices.get(vt1 - 1)), new Point(normalVertices.get(vn1 - 1))),
-                new Vertex(new Point(sVertices.get(v2 - 1)), new Point(textureVertices.get(vt2 - 1)), new Point(normalVertices.get(vn2 - 1))),
-                new Vertex(new Point(sVertices.get(v3 - 1)), new Point(textureVertices.get(vt3 - 1)), new Point(normalVertices.get(vn3 - 1)))));
+
+        try {
+            sTriangle.add(new Triangle(sVertices.get(v1 - 1), sVertices.get(v2 - 1), sVertices.get(v3 - 1)));
+            faces.add(new Face(new Vertex(new Point(sVertices.get(v1 - 1)), new Point(textureVertices.get(vt1 - 1)), new Point(normalVertices.get(vn1 - 1))),
+                    new Vertex(new Point(sVertices.get(v2 - 1)), new Point(textureVertices.get(vt2 - 1)), new Point(normalVertices.get(vn2 - 1))),
+                    new Vertex(new Point(sVertices.get(v3 - 1)), new Point(textureVertices.get(vt3 - 1)), new Point(normalVertices.get(vn3 - 1)))));
+        }
+        catch (Exception e) {
+
+        }
     }
 
     public static List<Face> getFaces() {

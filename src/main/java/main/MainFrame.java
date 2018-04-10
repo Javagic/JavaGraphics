@@ -26,8 +26,8 @@ public class MainFrame extends JFrame{
     private JPanel mPanel;
     private JButton mStartBtn;
 
-    static int width = 600;
-    static int height = 600;
+    static int width = 512;
+    static int height = 512;
     static BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     static BufferedImage diffuseImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
@@ -41,7 +41,7 @@ public class MainFrame extends JFrame{
     // Инициализация компанентов на главном экране
     private void initFrame(){
         mPanel = new JPanel();
-
+//
         mStartBtn = new JButton("Обработать");
         mStartBtn.addActionListener(new ActionListener() {
             @Override
@@ -133,11 +133,9 @@ public class MainFrame extends JFrame{
             for (int j = 0; j < image.getWidth() - 1; j++)
                 image.setRGB(j, i, Color.BLACK.getRGB());
         }
-        try {
+
             diffuseImage = ((BufferedImage) TGAReader.getImage("src/main/resources/african_head_diffuse .tga"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         diffuseImage = resize(diffuseImage,width,height);
         if(mBackFaceCulling.getState()){
             Luminosity.Companion.render(faces, new BackFaceCulling(image), mIntensity.getState());
