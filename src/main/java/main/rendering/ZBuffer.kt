@@ -61,9 +61,12 @@ class ZBuffer(var image: BufferedImage, var diffuseImage: BufferedImage) :Render
                 if (zBuffer[idx] < P.z) {
                     zBuffer[idx] = P.z.toDouble()
                     val col = diffuseImage.getRGB(uvP.x, uvP.y)
+
                     val red = ((col shr 16) and 0xff) * intensity
                     val green = ((col shr 8) and 0xff) * intensity
                     val blue = ((col) and 0xff) * intensity
+
+
                     image.setRGB(P.x, P.y, Color(red.toInt(), green.toInt(), blue.toInt()).rgb)
                 }
 
