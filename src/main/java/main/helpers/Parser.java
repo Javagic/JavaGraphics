@@ -1,7 +1,9 @@
-package main.utils;
+package main.helpers;
 
 import main.shape.Point;
 import main.shape.Triangle;
+import main.shape.primtives.Face;
+import main.shape.primtives.Vertex;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -18,9 +20,10 @@ public class Parser {
     private static List<Point> textureVertices = new ArrayList<>();
     private static List<Point> normalVertices = new ArrayList<>();
     private static List<Face> faces = new ArrayList<>();
+    public static boolean negativeTextures;
 
     public static void readFile(String PATH) {
-
+        negativeTextures = false;
         if (sVertices == null)
             sVertices = new ArrayList<>();
         else
@@ -33,7 +36,8 @@ public class Parser {
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(PATH), Charset.forName("UTF-8")));
             String line;
-            while ((line = reader.readLine()) != null && !line.equals("")) {
+            while ((line = reader.readLine()) != null) {
+                if (line.equals("")) continue;
                 String[] array = line.split(" +");
                 switch (array[0]) {
                     case "v":
@@ -50,7 +54,6 @@ public class Parser {
                         break;
                 }
             }
-            //System.out.println(sVertices.size());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -73,6 +76,9 @@ public class Parser {
             double y = Double.parseDouble(array[2]);
             double z = Double.parseDouble(array[3]);
 
+            if (list == textureVertices && !negativeTextures) {
+                negativeTextures = x < 0 || y < 0 || z < 0;
+            }
             list.add(new Point(x, y, z));
         } catch (Exception e) {
             //e.printStackTrace();
@@ -95,15 +101,11 @@ public class Parser {
         int vn2 = Integer.parseInt(array[2].split("/")[2]);
         int vn3 = Integer.parseInt(array[3].split("/")[2]);
 
-        try {
-            sTriangle.add(new Triangle(sVertices.get(v1 - 1), sVertices.get(v2 - 1), sVertices.get(v3 - 1)));
-            faces.add(new Face(new Vertex(new Point(sVertices.get(v1 - 1)), new Point(textureVertices.get(vt1 - 1)), new Point(normalVertices.get(vn1 - 1))),
-                    new Vertex(new Point(sVertices.get(v2 - 1)), new Point(textureVertices.get(vt2 - 1)), new Point(normalVertices.get(vn2 - 1))),
-                    new Vertex(new Point(sVertices.get(v3 - 1)), new Point(textureVertices.get(vt3 - 1)), new Point(normalVertices.get(vn3 - 1)))));
-        }
-        catch (Exception e) {
+        sTriangle.add(new Triangle(sVertices.get(v1 - 1), sVertices.get(v2 - 1), sVertices.get(v3 - 1)));
+        faces.add(new Face(new Vertex(new Point(sVertices.get(v1 - 1)), new Point(textureVertices.get(vt1 - 1)), new Point(normalVertices.get(vn1 - 1))),
+                new Vertex(new Point(sVertices.get(v2 - 1)), new Point(textureVertices.get(vt2 - 1)), new Point(normalVertices.get(vn2 - 1))),
+                new Vertex(new Point(sVertices.get(v3 - 1)), new Point(textureVertices.get(vt3 - 1)), new Point(normalVertices.get(vn3 - 1)))));
 
-        }
     }
 
     public static List<Face> getFaces() {

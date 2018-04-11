@@ -1,5 +1,7 @@
 package main.utils;
 
+import main.shape.primtives.IntPoint;
+import main.shape.primtives.Pixel;
 import main.shape.Point;
 
 public class VectorUtils {

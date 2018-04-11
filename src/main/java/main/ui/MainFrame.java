@@ -1,21 +1,24 @@
-package main;
+package main.ui;
 
+import main.helpers.OrtoManager;
+import main.helpers.Parser;
+import main.helpers.TGAReader;
 import main.rendering.BackFaceCulling;
 import main.rendering.Luminosity;
 import main.rendering.ZBuffer;
+import main.shape.primtives.Face;
 import main.utils.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
-public class MainFrame extends JFrame{
+public class MainFrame extends JFrame {
 
     private JMenuItem mExitItem, mOpenFileItem;
     private JMenuBar mMenuBar;
@@ -28,29 +31,27 @@ public class MainFrame extends JFrame{
 
     static int width = 512;
     static int height = 512;
-    static BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-    static BufferedImage diffuseImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    static BufferedImage image = generateImage(width, height);
+    static BufferedImage diffuseImage = generateImage(width, height);
+    private double[] zBuffer = new double[image.getHeight() * image.getWidth()];
 
-
-    public MainFrame(String title){
+    public MainFrame(String title) {
         initFrame();
         createMenu();
 
         initSettingsOfFrame(title);
     }
+
     // Инициализация компанентов на главном экране
-    private void initFrame(){
+    private void initFrame() {
         mPanel = new JPanel();
 //
         mStartBtn = new JButton("Обработать");
-        mStartBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(checkPathObj(PATH_OBJ))
-                    start();
-            }
+        mStartBtn.addActionListener(e -> {
+            if (new File(PATH_OBJ).exists())
+                start();
         });
-        if(PATH_OBJ != null)
+        if (PATH_OBJ != null)
             mStartBtn.setEnabled(true);
         else
             mStartBtn.setEnabled(false);
@@ -71,16 +72,17 @@ public class MainFrame extends JFrame{
 
         getContentPane().add(mPanel);
     }
+
     // Создание верхнего меню
-    private void createMenu(){
+    private void createMenu() {
         mOpenFileItem = new JMenuItem("Open");
         mOpenFileItem.addActionListener(e -> {
             JFileChooser fileopen = new JFileChooser();
+            fileopen.setCurrentDirectory(new File("src/main/resources/"));
             int ret = fileopen.showDialog(null, "Открыть файл");
             if (ret == JFileChooser.APPROVE_OPTION) {
                 File file = fileopen.getSelectedFile();
-                // TODO: 07.04.2018 здесь нужен тест
-                if(checkPathObj(file.getPath())) {
+                if (file.exists()) {
                     PATH_OBJ = file.getPath();
                     addStartListener(mIntensity);
                     addStartListener(mTexture);
@@ -100,8 +102,9 @@ public class MainFrame extends JFrame{
         mMenuBar = new JMenuBar();
         mMenuBar.add(mMenu);
     }
+
     // Стандартная настройка JFrame
-    private void initSettingsOfFrame(String title){
+    private void initSettingsOfFrame(String title) {
         setTitle(title);
         setJMenuBar(mMenuBar);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -111,18 +114,16 @@ public class MainFrame extends JFrame{
         setVisible(true);
     }
 
-    // TODO: 07.04.2018 Проверка на корректно введеный путь <Имя_файла>.obj
-    private boolean checkPathObj(String PATH){
-        return true;
-    }
     // Отрисовка итогового изображения
-    private void showResultImage(BufferedImage image){
+    private void showResultImage(BufferedImage image) {
         mImageLabel.setIcon(new ImageIcon(image));
-        mImageLabel.setBounds(10,10,27,30);
+        mImageLabel.setBounds(10, 10, 27, 30);
         mImageLabel.repaint();
         //repaint();
     }
-    private void start(){
+
+    private void start() {
+        clearBuffer();
         mImageLabel.setIcon(null);
 
         new OrtoManager(image, 1).init();
@@ -134,34 +135,40 @@ public class MainFrame extends JFrame{
                 image.setRGB(j, i, Color.BLACK.getRGB());
         }
 
-            diffuseImage = ((BufferedImage) TGAReader.getImage("src/main/resources/african_head_diffuse .tga"));
+        diffuseImage = ((BufferedImage) generateDiffuseImage(PATH_OBJ));
 
-        diffuseImage = resize(diffuseImage,width,height);
-        if(mBackFaceCulling.getState()){
+        if (mBackFaceCulling.getState()) {
             Luminosity.Companion.render(faces, new BackFaceCulling(image), mIntensity.getState());
-        }
-        else{
-            Luminosity.Companion.render(faces, new ZBuffer(image, diffuseImage,mTexture.getState()), mIntensity.getState());
+        } else {
+            Luminosity.Companion.render(faces, new ZBuffer(image, diffuseImage, mTexture.getState(), zBuffer), mIntensity.getState());
         }
 
         showResultImage(image);
         ImageUtils.saveImage(image);
     }
 
-    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
-        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
-        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
 
-        Graphics2D g2d = dimg.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
-
-        return dimg;
-    }
-
-    private void addStartListener(Checkbox cb){
-        cb.addItemListener(e->{
+    private void addStartListener(Checkbox cb) {
+        cb.addItemListener(e -> {
             start();
         });
+    }
+
+    private Image generateDiffuseImage(String path) {
+        String diffusePath = path.replace(".obj", "_diffuse.tga");
+        if (!new File(diffusePath).exists()) return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        return TGAReader.getImage(diffusePath, width, height);
+    }
+
+    public static BufferedImage generateImage(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            width = 100;
+            height = 100;
+        }
+        return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    }
+
+    private void clearBuffer() {
+        Arrays.fill(zBuffer, Double.NEGATIVE_INFINITY);
     }
 }

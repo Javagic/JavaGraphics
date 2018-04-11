@@ -1,8 +1,8 @@
 package main.shape
 
+import main.shape.primtives.Pixel
 import main.utils.LineDrawer
-import main.utils.OrtoManager
-import main.utils.Pixel
+import main.helpers.OrtoManager
 import java.awt.Color
 import java.awt.image.BufferedImage
 

@@ -1,6 +1,8 @@
 package main;
 
 
+import main.ui.MainFrame;
+
 /**
  * Created by Ilya on 3/2/2018.
  */

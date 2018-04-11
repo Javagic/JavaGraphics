@@ -1,18 +1,16 @@
 package main.rendering
 
-import main.shape.Point
 import main.shape.Triangle
-import main.utils.Face
-import main.utils.OrtoManager
-import main.utils.Pixel
+import main.shape.primtives.Face
+import main.helpers.OrtoManager
+import main.shape.primtives.Pixel
 import main.utils.VectorUtils.*
 import java.awt.Color
 import java.awt.image.BufferedImage
 
-class ZBuffer(var image: BufferedImage, var diffuseImage: BufferedImage, var allowTextures: Boolean) : Render {
+class ZBuffer(var image: BufferedImage, var diffuseImage: BufferedImage, var allowTextures: Boolean, val zBuffer: DoubleArray) : Render {
 
 
-    private val zBuffer by lazy { DoubleArray(image.width * image.height, { Double.NEGATIVE_INFINITY }) }
     override fun process(triangle: Triangle, face: Face, intensity: Double) {
         var p0 = OrtoManager.pixel(triangle.a)
         var p1 = OrtoManager.pixel(triangle.b)

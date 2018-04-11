@@ -1,4 +1,4 @@
-package main.utils
+package main.shape.primtives
 
 import main.shape.Point
 

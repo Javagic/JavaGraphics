@@ -1,6 +1,8 @@
-package main.utils
+package main.helpers
 
+import main.shape.primtives.Pixel
 import main.shape.Point
+import main.shape.primtives.IntPoint
 import java.awt.image.BufferedImage
 
 /**
@@ -10,11 +12,12 @@ import java.awt.image.BufferedImage
 class OrtoManager(val image: BufferedImage, val absSize: Int) {
 
 
-    fun init(){
-        Companion.width = image.width
-        Companion.height = image.height
+    fun init() {
+        width = image.width
+        height = image.height
         Companion.absSize = absSize
     }
+
     /**
      * Передача по модулю [absSize] в зависимости от исчиления координат точек в файле *.obj
      */
@@ -39,6 +42,7 @@ class OrtoManager(val image: BufferedImage, val absSize: Int) {
          * Поскольку в текстурах координаты от  0 до 1, сделал другой пересчет точек
          */
         fun diffusePixel(point: Point): IntPoint {
+            if (Parser.negativeTextures) return pixel(point)
             if (point.x !in -absSize..absSize || point.y !in -absSize..absSize) return Pixel.EMPTY
             val x = ((absSize - point.x) * width).toInt()
             //потому что в BufferedImage 0,0 находится в верхнем левом углу

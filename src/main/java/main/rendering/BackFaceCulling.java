@@ -2,11 +2,9 @@ package main.rendering;
 
 import main.shape.Point;
 import main.shape.Triangle;
-import main.utils.Face;
-import main.utils.Pixel;
+import main.shape.primtives.Face;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import static main.utils.VectorUtils.scalar;

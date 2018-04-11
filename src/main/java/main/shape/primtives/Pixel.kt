@@ -1,13 +1,14 @@
-package main.utils
+package main.shape.primtives
 
 import main.shape.Point
 import main.shape.Triangle
+import main.helpers.OrtoManager
 
 class Pixel(x: Int, y: Int) : IntPoint(x, y, 0) {
 
     constructor(point: Point) : this(point.x.toInt(),point.y.toInt())
 companion object {
-    val EMPTY = Pixel(-1,-1)
+    val EMPTY = Pixel(-1, -1)
 }
 
     /**

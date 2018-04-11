@@ -2,10 +2,7 @@ package main.rendering
 
 import main.shape.Point
 import main.shape.Triangle
-import main.utils.Face
-import main.utils.Pixel
-
-import java.awt.*
+import main.shape.primtives.Face
 
 import main.utils.VectorUtils.scalar
 
