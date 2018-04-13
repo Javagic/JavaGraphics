@@ -9,9 +9,79 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 
 class ZBuffer(var image: BufferedImage, var diffuseImage: BufferedImage, var allowTextures: Boolean, val zBuffer: DoubleArray) : Render {
+    override fun process(triangle: Triangle, face: Face, intensity1: Double, intensity2: Double, intensity3: Double) {
+        var p0 = OrtoManager.pixel(triangle.a)
+        var p1 = OrtoManager.pixel(triangle.b)
+        var p2 = OrtoManager.pixel(triangle.c)
+        var uv0 = OrtoManager.diffusePixel(face.a.vt)
+        var uv1 = OrtoManager.diffusePixel(face.b.vt)
+        var uv2 = OrtoManager.diffusePixel(face.c.vt)
+        var ity0 = intensity1;
+        var ity1 = intensity2;
+        var ity2 = intensity3;
+        if (p0 == Pixel.EMPTY || p1 == Pixel.EMPTY || p2 == Pixel.EMPTY) return
+        if (p0.y == p1.y && p0.y == p2.y) return
+        if (p0.y > p1.y) {
+            p0 = p1.also { p1 = p0 }
+            uv0 = uv1.also { uv1 = uv0 }
+            ity0 = ity1.also { ity1 = ity0 }
+        }
+        if (p0.y > p2.y) {
+            p0 = p2.also { p2 = p0 }
+            uv0 = uv2.also { uv2 = uv0 }
+            ity0 = ity2.also { ity2 = ity0 }
+
+        }
+        if (p1.y > p2.y) {
+            p1 = p2.also { p2 = p1 }
+            uv1 = uv2.also { uv2 = uv1 }
+            ity1 = ity2.also { ity2 = ity1 }
+
+        }
+        val totalHeight = p2.y - p0.y
+        for (i in 0..totalHeight) {
+            val secondHalf = i > (p1.y - p0.y) || (p1.y == p0.y)
+            val segmentHeight = if (secondHalf) p2.y - p1.y else p1.y - p0.y
+            val alpha = i.toDouble() / totalHeight
+            val beta = (i - (if (secondHalf) p1.y - p0.y else 0).toDouble()) / segmentHeight
+            var A = sum(p0, multiply(diff(p2, p0), alpha))
+            var B = if (secondHalf) sum(p1, multiply(diff(p2, p1), beta)) else sum(p0, multiply(diff(p1, p0), beta))
+            var uvA = sum(uv0, multiply(diff(uv2, uv0), alpha))
+            var uvB = if (secondHalf) sum(uv1, multiply(diff(uv2, uv1), beta)) else sum(uv0, multiply(diff(uv1, uv0), beta))
+            var ityA = ity0 + (ity2 - ity0) * alpha
+            var ityB = if (secondHalf) ity1 + (ity2 - ity1) * beta else ity0 + (ity1 - ity0) * beta
+
+            if (A.x > B.x) {
+                A = B.also { B = A }
+                uvA = uvB.also { uvB = uvA }
+                ityA = ityB.also { ityB = ityA }
+            }
+            for (j in A.x..B.x) {
+                val phi = if (B.x == A.x) 1.0 else (j - A.x).toDouble() / (B.x - A.x)
+                val P = sum(A, multiply(diff(B, A), phi))
+                val uvP = sum(uvA, multiply(diff(uvB, uvA), phi))
+                val ityP = ityA + (ityB - ityA) * phi
+                P.x = j; P.y = p0.y + i;
+                val idx = (P.x + P.y * image.width)
+                if (idx > zBuffer.size - 1) continue
+                if (zBuffer[idx] < P.z) {
+                    zBuffer[idx] = P.z.toDouble()
+                    val col = diffuseImage.getRGB(uvP.x, uvP.y)
+
+                    val red = ((if (allowTextures) ((col shr 16) and 0xff) else 255) * ityP).let { if(it>255) 255.0 else if(it<0) 0.0 else it }
+                    val green = ((if (allowTextures) ((col shr 8) and 0xff) else 255) * ityP).let { if(it>255) 255.0 else if(it<0) 0.0 else it }
+                    val blue = ((if (allowTextures) ((col) and 0xff) else 255) * ityP).let { if(it>255) 255.0 else if(it<0) 0.0 else it }
 
 
-    override fun process(triangle: Triangle, face: Face, intensity: Double) {
+                    image.setRGB(P.x, P.y, Color(red.toInt(), green.toInt(), blue.toInt()).rgb)
+                }
+            }
+        }
+    }
+
+
+    @Deprecated(message = "intensity")
+    fun process(triangle: Triangle, face: Face, intensity: Double) {
         var p0 = OrtoManager.pixel(triangle.a)
         var p1 = OrtoManager.pixel(triangle.b)
         var p2 = OrtoManager.pixel(triangle.c)
@@ -72,4 +142,5 @@ class ZBuffer(var image: BufferedImage, var diffuseImage: BufferedImage, var all
 
         }
     }
+
 }
