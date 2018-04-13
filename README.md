@@ -9,8 +9,12 @@
 * Растеризация треугольников
 * Отсечение задних граней модели
 * Z-буферизация
-* Коррекция перспективных изображений
+* Шейдер Гуро
 
+
+![culling](https://raw.githubusercontent.com/Javagic/JavaGraphics/master/images/culling_image.jpg)
+![luminosity](https://raw.githubusercontent.com/Javagic/JavaGraphics/master/images/luminosity_image.jpg)
+![texture](https://raw.githubusercontent.com/Javagic/JavaGraphics/master/images/texture_image.jpg)
 
 ## Сборка⚒
 ### Откройте проект в IDEA
@@ -31,4 +35,9 @@ $ ./gradlew build
 Для сборки с автотестами использовать команду
 ```shell
 $ ./gradlew test build
+```
+Jar файл `JavaGraphics-1.0-SNAPSHOT.jar` с программой будет находится в директории `build/libs`
+Для его запуска необходимо ввести команду 
+```shell
+$ java build/libs/JavaGraphics-1.0-SNAPSHOT.jar
 ```
