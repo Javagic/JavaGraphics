@@ -29,8 +29,8 @@ public class MainFrame extends JFrame {
     private JPanel mPanel;
     private JButton mStartBtn;
 
-    static int width = 512;
-    static int height = 512;
+    static int width = 800;
+    static int height = 800;
     static BufferedImage image = generateImage(width, height);
     static BufferedImage diffuseImage = generateImage(width, height);
     private double[] zBuffer = new double[image.getHeight() * image.getWidth()];
