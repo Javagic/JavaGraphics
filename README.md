@@ -36,6 +36,10 @@ $ ./gradlew build
 ```shell
 $ ./gradlew test build
 ```
+Для запуска проекта через gradle необходимо ввести команду
+```shell
+$ ./gradlew run
+```
 Jar файл `JavaGraphics-1.0-SNAPSHOT.jar` с программой будет находится в директории `build/libs`
 Для его запуска необходимо ввести команду 
 ```shell
